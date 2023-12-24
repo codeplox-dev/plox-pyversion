@@ -20,7 +20,7 @@ check: test lint
 
 clean:
 	@echo "+ $@"
-	for d in src tools; do \
+	for d in src; do \
 		find $$d -name "__pycache__" -exec rm -Rf {} + ; \
 	done
 
