@@ -3,8 +3,6 @@ export SHELL := /usr/bin/env TZ=UTC bash -o pipefail
 DEBUG ?=
 PYPI_ALIAS ?= testpypi
 
-export PROJECT_DIR=$(CURDIR)
-
 all: check
 
 ifndef VERBOSE:
