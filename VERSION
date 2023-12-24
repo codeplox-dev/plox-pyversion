@@ -1,0 +1,3 @@
+# The declared version; will be manipulated by project build tools.
+# Note that this follows semver semantics, cf. ...
+0.1.0
