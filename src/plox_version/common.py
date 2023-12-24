@@ -1,11 +1,10 @@
-import argparse
 import logging
 import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import List, Tuple, Callable, Dict, Any, Optional
+from typing import List, Tuple, Dict, Any, Optional
 
 _debug = os.getenv("DEBUG", None)
 if _debug:
@@ -60,26 +59,23 @@ def gex(
     return _decode(p.stdout)
 
 
-def env(key: str) -> str:
+def env(key: str, default: Optional[str] = None) -> str:
     if key not in os.environ:
-        raise RuntimeError(f"Missing required environment variable: {key}")
+        if default is not None:
+            logger.debug(f"Using default value {default} for envvar {key}")
+            return default
+        else:
+            raise RuntimeError(f"Missing required environment variable: {key}")
+
     return os.environ[key].strip()
 
 
 def project_dir() -> Path:
-    p = Path(env(project_dir_env))
-    if not p.is_dir():
+    p = Path(env(project_dir_env, "."))
+    if not p.is_dir() or not Path(p, ".git"):
         raise RuntimeError(f"Unusable project directory provided: {p}")
 
     return p
-
-
-def args(args: Optional[List[str]] = None, *fns: Callable[[argparse.ArgumentParser], argparse.Action]) -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
-    for fn in fns:
-        fn(parser)
-
-    return parser.parse_args(args if args is not None else sys.argv[1:])
 
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4

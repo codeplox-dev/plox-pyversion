@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import argparse
 import logging
 import sys
 from pathlib import Path
@@ -20,12 +20,38 @@ def _head_commit(project_dir: Path) -> str:
     return o[0]
 
 
+def _from_file(version_file: str) -> str:
+    p = Path(version_file)
+    if not p.is_file():
+        raise RuntimeError(f"Missing verison file {version_file}")
+
+    with p.open('r', encoding="utf-8") as inf:
+        lines = list(filter(lambda li: not li.startswith("#") or li.startswith("//"), inf.readlines()))
+
+    if len(lines) != 1:
+        raise RuntimeError(f"Ill-formed verison file {version_file}; expecting a single line after dropping comments")
+
+    return lines[0].strip()
+
+
 def _version(rargs: Optional[List[str]] = None) -> str:
     project_dir = common.project_dir()
 
-    args = common.args(rargs, lambda pargs: pargs.add_argument("--version", type=str, required=True))
+    parser = argparse.ArgumentParser()
+    version_opt_group = parser.add_mutually_exclusive_group(required=True)
 
-    version: str = args.version
+    version_opt_group.add_argument("--version", type=str)
+    version_opt_group.add_argument("--version-file", type=str)
+
+    args = parser.parse_args(rargs)
+
+    version_str = args.version
+    if version_str is None:
+        version = _from_file(args.version_file)
+    else:
+        version = version_str
+
+    # TODO: add version string verification and validity given previous version
     logger.debug(f"CLI arg 'version': {version}")
 
     if not version or version == "":
