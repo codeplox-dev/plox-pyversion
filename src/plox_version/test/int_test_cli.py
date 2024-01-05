@@ -11,7 +11,7 @@ from typing import Generator
 import pytest
 
 from plox_version import common, cli
-from plox_version.test.git_test_project import GitTestProject
+from plox_git_testsupport.git_test_project import GitTestProject
 
 
 @pytest.fixture(scope="function")
@@ -32,6 +32,7 @@ def git_test_project(tmp_d: Path) -> Generator[GitTestProject, None, None]:
 
 # Note: these tests may not be executed in parallel b/c they rely on os.environ
 # values to be set / unset
+
 
 @pytest.mark.integration
 def test_plox_version_clean(git_test_project: GitTestProject) -> None:

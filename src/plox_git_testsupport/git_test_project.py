@@ -6,7 +6,6 @@ from typing import List
 
 
 class GitTestProject:
-
     def __init__(self, proj_dir: Path):
         self.proj_dir = proj_dir
 
@@ -36,5 +35,6 @@ class GitTestProject:
 
     def __call__(self, *args: str) -> List[str]:
         return self._run_git_command(*args)
+
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4

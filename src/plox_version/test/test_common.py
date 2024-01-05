@@ -12,4 +12,5 @@ def test_error_on_missing_envvar() -> None:
     except RuntimeError:
         pass
 
+
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4
