@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 name = "plox-version"
 version = "0.3.0"
 description = ""
-authors = [ "mdye <mdye@codeplox.dev>",]
+authors = [ "mike <mike@codeplox.dev>",]
 exclude = [ "**/test/*",]
 
 [[tool.poetry.packages]]
