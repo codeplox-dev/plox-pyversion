@@ -25,11 +25,15 @@ def _from_file(version_file: str) -> str:
     if not p.is_file():
         raise RuntimeError(f"Missing verison file {version_file}")
 
-    with p.open('r', encoding="utf-8") as inf:
-        lines = list(filter(lambda li: not li.startswith("#") or li.startswith("//"), inf.readlines()))
+    with p.open("r", encoding="utf-8") as inf:
+        lines = list(
+            filter(lambda li: not li.startswith("#") or li.startswith("//"), inf.readlines())
+        )
 
     if len(lines) != 1:
-        raise RuntimeError(f"Ill-formed verison file {version_file}; expecting a single line after dropping comments")
+        raise RuntimeError(
+            f"Ill-formed verison file {version_file}; expecting a single line after dropping comments"
+        )
 
     return lines[0].strip()
 

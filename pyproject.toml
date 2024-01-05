@@ -4,13 +4,17 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "plox-version"
-version = "0.2.0"
+version = "0.3.0"
 description = ""
 authors = [ "mdye <mdye@codeplox.dev>",]
 exclude = [ "**/test/*",]
 
 [[tool.poetry.packages]]
 include = "plox_version"
+from = "src"
+
+[[tool.poetry.packages]]
+include = "plox_git_testsupport"
 from = "src"
 
 [[tool.poetry.include]]
