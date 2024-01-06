@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import argparse
 import logging
 import sys
@@ -79,8 +80,5 @@ def plox_version() -> None:
     # this program will always throw an exception instead of exit nonzero
     sys.exit(0)
 
-
-if __name__ == "__main__":
-    plox_version()
 
 # vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4
