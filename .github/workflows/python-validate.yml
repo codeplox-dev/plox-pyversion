@@ -17,7 +17,7 @@ jobs:
       - name: make
         shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -yq direnv make
-          direnv allow .
+          sudo apt-get update &>/dev/null
+          sudo apt-get install -yq direnv make &>/dev/null
+          direnv allow . && eval "$(direnv export bash)"
           make lint
