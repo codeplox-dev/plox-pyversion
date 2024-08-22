@@ -17,5 +17,7 @@ jobs:
       - name: make
         shell: bash
         run: |
+          sudo apt-get update
+          sudo apt-get install -yq direnv make
           direnv allow .
           make lint
