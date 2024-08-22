@@ -1,11 +1,7 @@
-[build-system]
-requires = [ "poetry-core>=1.0.0",]
-build-backend = "poetry.core.masonry.api"
-
 [tool.poetry]
 name = "plox-version"
-version = "0.4.0"
-description = ""
+version = "0.0.0"
+description = "A Python versioning utility for software projects in git repos."
 authors = [ "mike <mike@codeplox.dev>",]
 exclude = [ "**/test/*",]
 
@@ -22,47 +18,24 @@ path = "src"
 format = "sdist"
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.12"
 
 [tool.poetry.dev-dependencies]
 pyright = "*"
-black = "*"
+ruff = "*"
 pytest = "*"
 pylint = "*"
 mypy = "*"
 
+
 [tool.poetry.scripts]
 plox-version = "plox_version.cli:plox_version"
 
-[tool.black]
-line-length = 100
-include = "\\.py$|.*scripts/python/.*$"
-extend-exclude = "^/(\n  (\n    | .*\\.pyi$\n  )/\n)\n"
 
-[tool.pyright]
-reportMissingImports = true
-reportMissingTypeStubs = true
-pythonVersion = "3.9"
-typeCheckingMode = "strict"
-useLibraryCodeForTypes = true
+[build-system]
+requires = [ "poetry-core>=1.0.0",]
+build-backend = "poetry.core.masonry.api"
 
-[tool.mypy]
-python_version = "3.9"
-warn_unused_configs = true
-ignore_missing_imports = false
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = true
-warn_no_return = true
-warn_return_any = true
-warn_unreachable = true
-strict = true
-
-[[tool.mypy.overrides]]
-module = [ "pytest",]
-ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 python_files = "*test*.py"

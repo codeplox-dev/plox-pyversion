@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plox_version import common
 
 # TODO: add more unit tests, and more meaningful unit tests; testing burden is

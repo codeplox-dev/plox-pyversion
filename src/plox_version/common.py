@@ -1,16 +1,15 @@
+"""Common utilities for plox version tooling."""
+
 import logging
 import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import List, Tuple, Dict, Any, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 _debug = os.getenv("DEBUG", None)
-if _debug:
-    level = logging.DEBUG
-else:
-    level = logging.ERROR
+level = logging.DEBUG if _debug else logging.ERROR
 logging.basicConfig(level=level, stream=sys.stderr)
 
 logger = logging.getLogger(__name__)
@@ -21,7 +20,7 @@ project_dir_env = "PROJECT_DIR"
 
 
 def _decode(by: bytes) -> List[str]:
-    return list(filter(lambda li: not not li, by.decode(_utf8).split("\n")))
+    return list(filter(lambda li: bool(li), by.decode(_utf8).split("\n")))
 
 
 def _log_process_output(*captured: Tuple[Level, bytes]) -> None:
@@ -33,6 +32,17 @@ def _log_process_output(*captured: Tuple[Level, bytes]) -> None:
 def gex(
     *args: str, cwd: Path, env: Optional[Dict[Any, Any]] = None, expected_code: int = 0
 ) -> List[str]:
+    """Wrap local git command executable and execute.
+
+    Args:
+        args (str): List of args to pass to the ``git`` executable.
+        cwd (Path): Working dir.
+        env (Optional[Dict[Any, Any]]): Key:Value pairs to set the environement with.
+        expected_code (int): Expected integer return code; Defaults to 0.
+
+    Returns:
+        List[str]: STDOUT of executable call.
+    """
     exe = shutil.which("git")
     if not exe:
         raise RuntimeError("Missing required git executable")
@@ -42,9 +52,8 @@ def gex(
 
     if not env:
         env = {}
-    p = subprocess.run(
-        [exe] + [a for a in args], stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env, cwd=cwd
-    )
+
+    p = subprocess.run([exe, *list(args)], capture_output=True, env=env, cwd=cwd)  # noqa: S603
 
     failed = False
     if p.returncode != expected_code:
@@ -60,6 +69,17 @@ def gex(
 
 
 def env(key: str, default: Optional[str] = None) -> str:
+    """Fetch an environment variable.
+
+    environ.get() exists?
+
+    Args:
+        key (str): Name of env variable to fetch.
+        default (Optional[str]): Default value to get.
+
+    Returns:
+        str:
+    """
     if key not in os.environ:
         if default is not None:
             logger.debug(f"Using default value {default} for envvar {key}")
@@ -71,11 +91,9 @@ def env(key: str, default: Optional[str] = None) -> str:
 
 
 def project_dir() -> Path:
+    """Return path to project dir."""
     p = Path(env(project_dir_env, "."))
     if not p.is_dir() or not Path(p, ".git"):
         raise RuntimeError(f"Unusable project directory provided: {p}")
 
     return p
-
-
-# vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4

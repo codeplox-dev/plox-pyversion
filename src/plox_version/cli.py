@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+"""A Python versioning utility for software projects in git repos."""
 
 import argparse
 import logging
@@ -12,12 +12,13 @@ logger = logging.getLogger(__name__)
 
 
 def _is_git_dirty(project_dir: Path) -> bool:
-    return not not common.gex("status", "--short", cwd=project_dir)
+    return bool(common.gex("status", "--short", cwd=project_dir))
 
 
 def _head_commit(project_dir: Path) -> str:
     o = common.gex("rev-parse", "--short", "HEAD", cwd=project_dir)
-    assert len(o) == 1
+    if len(o) != 1:
+        raise RuntimeError(f"rev-parse doesn't have one element?: {len(o)}")
     return o[0]
 
 
@@ -33,7 +34,8 @@ def _from_file(version_file: str) -> str:
 
     if len(lines) != 1:
         raise RuntimeError(
-            f"Ill-formed verison file {version_file}; expecting a single line after dropping comments"
+            f"Ill-formed verison file {version_file}; "
+            + "expecting a single line after dropping comments"
         )
 
     return lines[0].strip()
@@ -51,10 +53,7 @@ def _version(rargs: Optional[List[str]] = None) -> str:
     args = parser.parse_args(rargs)
 
     version_str = args.version
-    if version_str is None:
-        version = _from_file(args.version_file)
-    else:
-        version = version_str
+    version = version_str if version_str else _from_file(args.version_file)
 
     # TODO: add version string verification and validity given previous version
     logger.debug(f"CLI arg 'version': {version}")
@@ -71,14 +70,8 @@ def _version(rargs: Optional[List[str]] = None) -> str:
 
 
 def plox_version() -> None:
-    """
-    CLI entrypoint
-    """
-
+    """CLI entrypoint."""
     version_str = _version(sys.argv[1:])
-    print(version_str)
+    logger.info(version_str)
     # this program will always throw an exception instead of exit nonzero
     sys.exit(0)
-
-
-# vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4
