@@ -26,7 +26,7 @@ ruff = "*"
 pytest = "*"
 pylint = "*"
 mypy = "*"
-
+detect-secrets = { git = "https://github.com/ibm/detect-secrets.git", tag = "0.13.1+ibm.62.dss" }
 
 [tool.poetry.scripts]
 plox-version = "plox_version.cli:plox_version"
