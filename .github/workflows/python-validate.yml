@@ -1,0 +1,23 @@
+name: Python validation
+
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: make
+        shell: bash
+        run: |
+          sudo apt-get update &>/dev/null
+          sudo apt-get install -yq direnv make &>/dev/null
+          direnv allow . && eval "$(direnv export bash)"
+          make lint

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # pyright: reportPrivateUsage=false
 
 import os
@@ -10,8 +8,8 @@ from typing import Generator
 
 import pytest
 
-from plox_version import common, cli
 from plox_git_testsupport.git_test_project import GitTestProject
+from plox_version import cli, common
 
 
 @pytest.fixture(scope="function")
