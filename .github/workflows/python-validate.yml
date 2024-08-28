@@ -1,4 +1,4 @@
-name: Python validation
+name: Code
 
 on: push
 
@@ -55,7 +55,7 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update &>/dev/null
-          sudo apt-get install -yq direnv make &>/dev/null
+          sudo apt-get install -yq direnv make git &>/dev/null
           direnv allow . && eval "$(direnv export bash)"
           make test-unit
   test-integration:
@@ -73,6 +73,9 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update &>/dev/null
-          sudo apt-get install -yq direnv make &>/dev/null
+          sudo apt-get install -yq direnv make git &>/dev/null
+          git config --global init.defaultBranch main
+          git config --global user.email urmom@fake.com
+          git config --global user.name "Your mom"
           direnv allow . && eval "$(direnv export bash)"
           make test-integration
