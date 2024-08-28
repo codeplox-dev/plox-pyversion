@@ -4,7 +4,7 @@ import argparse
 import logging
 import sys
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional, cast
 
 from plox_version import common
 
@@ -41,7 +41,7 @@ def _from_file(version_file: str) -> str:
     return lines[0].strip()
 
 
-def _version(rargs: Optional[List[str]] = None) -> str:
+def _version(rargs: Optional[list[str]] = None) -> str:
     project_dir = common.project_dir()
 
     parser = argparse.ArgumentParser()
@@ -52,8 +52,7 @@ def _version(rargs: Optional[List[str]] = None) -> str:
 
     args = parser.parse_args(rargs)
 
-    version_str = args.version
-    version = version_str if version_str else _from_file(args.version_file)
+    version = cast(str, args.version) if args.version else _from_file(args.version_file)
 
     # TODO: add version string verification and validity given previous version
     logger.debug(f"CLI arg 'version': {version}")
