@@ -1,9 +1,28 @@
-name: Python validation
+name: Code
 
 on: push
 
 jobs:
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: make
+        shell: bash
+        run: |
+          sudo apt-get update &>/dev/null
+          sudo apt-get install -yq direnv make &>/dev/null
+          direnv allow . && eval "$(direnv export bash)"
+          make type-check
   lint:
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -21,3 +40,42 @@ jobs:
           sudo apt-get install -yq direnv make &>/dev/null
           direnv allow . && eval "$(direnv export bash)"
           make lint
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: make
+        shell: bash
+        run: |
+          sudo apt-get update &>/dev/null
+          sudo apt-get install -yq direnv make git &>/dev/null
+          direnv allow . && eval "$(direnv export bash)"
+          make test-unit
+  test-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: make
+        shell: bash
+        run: |
+          sudo apt-get update &>/dev/null
+          sudo apt-get install -yq direnv make git &>/dev/null
+          git config --global init.defaultBranch main
+          git config --global user.email urmom@fake.com
+          git config --global user.name "Your mom"
+          direnv allow . && eval "$(direnv export bash)"
+          make test-integration
