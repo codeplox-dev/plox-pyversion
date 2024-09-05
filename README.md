@@ -1,4 +1,4 @@
-# plox-version
+# plox-pyversion
 
 Available in test PyPI:
 
