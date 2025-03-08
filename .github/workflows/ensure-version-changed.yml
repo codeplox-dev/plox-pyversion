@@ -1,4 +1,4 @@
-name: Ensure VERSION file bumped
+name: VERSION bump
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
 jobs:
   changed_files:
     runs-on: ubuntu-latest
-    name: Ensure VERSION file has been updated
+    name: validate
     steps:
       - uses: actions/checkout@v4
         with:

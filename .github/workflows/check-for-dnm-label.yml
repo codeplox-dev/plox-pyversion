@@ -1,10 +1,11 @@
-name: Check for blocking labels
+name: Label check
 
 on:
   pull_request:
 
 jobs:
   fail-if-blocked:
+    name: do-not-merge
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
